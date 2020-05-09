@@ -1,7 +1,8 @@
 # copy from https://hub.docker.com/r/nicolaka/netshoot/dockerfile
 FROM alpine:3.10.3
 
-LABEL maintainer="Huanle Han <hanhuanle@caicloud.io>"
+LABEL maintainer="ff"
+ 
 
 RUN set -ex \
     && echo "http://nl.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
@@ -41,15 +42,17 @@ RUN set -ex \
     nmap-nping \
     openssl \
     py-crypto \
-    py2-virtualenv \
-    python2 \
+    py3-virtualenv \
+    python3 \
     scapy \
     socat \
     strace \
     tcpdump \
     tcptraceroute \
     util-linux \
-    vim
+    vim \
+    && pip3 install requests
+
 
 # apparmor issue #14140
 RUN mv /usr/sbin/tcpdump /usr/bin/tcpdump

@@ -1,4 +1,3 @@
-#ref: https://docs.python.org/2/library/socketserver.html
 import socket
 import sys
 import traceback
@@ -27,7 +26,7 @@ class MyThread(Thread):
                 contents["ERROR(wait result timeout)"] += 1
             else:
                 contents["ERROR(wait result timeout)"] = 1
-        except Exception, e:
+        except Exception as e:
             if repr(e) in contents.keys():
                 contents[repr(e)] += 1
             else:
@@ -40,7 +39,7 @@ def single_socket(host, port):
 
     # As you can see, there is no connect() call; UDP has no connections.
     # Instead, data is directly sent to the recipient via sendto().
-    sock.sendto( "test\n", (HOST, PORT))
+    sock.sendto( "test\n".encode('utf-8'), (HOST, PORT))
     received = sock.recv(1024)
     return received
 
@@ -53,19 +52,19 @@ def sent_socket(HOST, PORT):
     for t in queue_t:
         t.join()
 
-    print "%d UDP sockets have been sent. \n" %socket_num
-    print "The feedback is from:"
+    print ("%d UDP sockets have been sent. \n" %socket_num)
+    print ("The feedback is from:")
     for item in contents.items():
-        print "%s(%d)\n" %(item[0],item[1])
+        print ("%s(%d)\n" %(item[0],item[1]))
 
 try:
     received = single_socket(HOST, PORT)
 except func_timeout.exceptions.FunctionTimedOut:
-    print "Establish UDP Connection(%s:%s) time out!" %(HOST,PORT)
+    print ("Establish UDP Connection(%s:%s) time out!" %(HOST,PORT))
     sys.exit(0)
-except Exception, e:
-    print "UDP Connection(%s:%s) can not be established!" %(HOST,PORT)
-    print 'traceback.print_exc():'; traceback.print_exc()
+except Exception as e:
+    print ("UDP Connection(%s:%s) can not be established!" %(HOST,PORT))
+    print ('traceback.print_exc():', traceback.print_exc())
     sys.exit(0)
 
 sent_socket(HOST, PORT)
